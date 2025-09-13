@@ -1,4 +1,3 @@
-// src/DiceApp.tsx
 "use client";
 
 import React, { useCallback, useEffect, useMemo, useState } from "react";
@@ -20,7 +19,6 @@ import {
 } from "./die-types";
 import type { UserConfig } from "./types";
 
-/** Top-down, no-move camera */
 function TopDownCamera() {
   const { camera } = useThree();
   useEffect(() => {
@@ -30,7 +28,6 @@ function TopDownCamera() {
   return null;
 }
 
-/** Pre-roll stacked/grid placement */
 function preRollPosition(index: number): [number, number, number] {
   const cols = 4,
     spacing = 1.25;

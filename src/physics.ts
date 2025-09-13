@@ -1,4 +1,3 @@
-// src/physics.ts
 export const randomRange = (min: number, max: number) =>
   Math.random() * (max - min) + min;
 export const randomSign = () => (Math.random() < 0.5 ? -1 : 1);

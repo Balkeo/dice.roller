@@ -1,4 +1,3 @@
-// pages/index.tsx
 import dynamic from "next/dynamic";
 import React from "react";
 import UserConfigForm from "../src/UserConfig";

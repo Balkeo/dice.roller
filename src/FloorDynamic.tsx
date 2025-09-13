@@ -63,6 +63,6 @@ export function WallsDynamic() {
     type: "Static",
     args: [innerW, WALL_THICKNESS, innerH],
     position: [0, CEILING_Y, 0],
-  })); // ceiling
+  }));
   return null;
 }

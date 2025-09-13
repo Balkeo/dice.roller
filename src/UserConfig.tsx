@@ -1,4 +1,3 @@
-// src/UserConfig.tsx
 import React from "react";
 import type { UserConfig } from "./types";
 

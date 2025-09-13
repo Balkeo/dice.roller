@@ -1,7 +1,5 @@
-// src/convex.ts
 import * as THREE from "three";
 
-/** Convex args for @react-three/cannon */
 export type ConvexArgs = { vertices: number[][]; faces: number[][] };
 
 export function getIndexArray(geom: THREE.BufferGeometry): Uint32Array {
@@ -57,7 +55,6 @@ export function geometryToConvexArgs(geom: THREE.BufferGeometry): ConvexArgs {
   return { vertices, faces };
 }
 
-/** A physical face may be made of multiple triangles: group by normal. */
 export type FaceGroup = {
   normal: THREE.Vector3;
   center: THREE.Vector3;
@@ -96,7 +93,7 @@ export function buildFaceGroups(geom: THREE.BufferGeometry): {
     A.set(pos.getX(i0), pos.getY(i0), pos.getZ(i0));
     B.set(pos.getX(i1), pos.getY(i1), pos.getZ(i1));
     C.set(pos.getX(i2), pos.getY(i2), pos.getZ(i2));
-    N.copy(C).sub(B).cross(A.clone().sub(B)).normalize(); // *** no sign flipping ***
+    N.copy(C).sub(B).cross(A.clone().sub(B)).normalize();
     const k = keyFor(N);
     let g = map.get(k);
     if (!g) {
@@ -107,7 +104,7 @@ export function buildFaceGroups(geom: THREE.BufferGeometry): {
   }
 
   const groups = Array.from(map.values());
-  // centers
+
   for (const g of groups) {
     const c = new THREE.Vector3();
     for (const t of g.triIndices) {

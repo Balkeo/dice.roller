@@ -1,6 +1,5 @@
-// src/types.ts
 export type UserConfig = {
   name: string;
-  color: string; // hex #RRGGBB
+  color: string;
   room: { id: string; code: string };
 };

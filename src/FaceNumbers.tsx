@@ -1,4 +1,3 @@
-// src/FaceNumbers.tsx
 import React from "react";
 import * as THREE from "three";
 import { Text } from "@react-three/drei";
@@ -9,7 +8,7 @@ export function FaceNumbers({
   labelForGroup,
   color = "white",
   size = 0.28,
-  lift = 0.06, // more lift to avoid z-fighting
+  lift = 0.06,
 }: {
   groups: FaceGroup[];
   labelForGroup: (g: FaceGroup, all: FaceGroup[]) => string;
@@ -36,8 +35,8 @@ export function FaceNumbers({
               anchorY="middle"
               outlineWidth={0.012}
               outlineColor="black"
-              renderOrder={1000} // draw late
-              depthTest={false} // don't let the die hide text
+              renderOrder={1000}
+              depthTest={false}
               depthWrite={false}
               toneMapped={false}
             >

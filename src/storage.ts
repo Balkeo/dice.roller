@@ -1,4 +1,3 @@
-// src/storage.ts
 import type { UserConfig } from "./types";
 const KEY = "teal-dice:user-config";
 

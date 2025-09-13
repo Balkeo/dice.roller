@@ -1,4 +1,3 @@
-// src/Die.tsx
 import React, { useEffect, useMemo, useRef } from "react";
 import { useConvexPolyhedron } from "@react-three/cannon";
 import * as THREE from "three";
@@ -19,7 +18,7 @@ export function Die({
   onTopValue,
   tintColor,
   rollToken,
-  acceptUpdates, // set false when results modal is open to freeze value
+  acceptUpdates,
 }: {
   plan: DiePlan;
   onTopValue: (id: string, value: number) => void;
@@ -27,23 +26,19 @@ export function Die({
   rollToken: number;
   acceptUpdates: boolean;
 }) {
-  // 1) Build visual geometry
   const baseGeom = useMemo(() => plan.spec.makeGeometry(), [plan.spec]);
 
-  // 2) ***BAKE SCALE INTO GEOMETRY*** so physics == visuals
   const scaledGeom = useMemo(() => {
     const g = baseGeom.clone();
     const s = plan.spec.scale ?? 1;
     if (s !== 1) g.scale(s, s, s);
-    // Keep it centered (just in case a generator was slightly off)
+
     g.computeBoundingSphere();
     return g;
   }, [baseGeom, plan.spec.scale]);
 
-  // 3) Build convex props from the *scaled* geometry
   const convex = useMemo(() => geometryToConvexArgs(scaledGeom), [scaledGeom]);
 
-  // 4) Group triangles into physical faces (for labels & value mapping)
   const { groups, triToGroup } = useMemo(
     () =>
       plan.spec.groupsBuilder
@@ -52,19 +47,17 @@ export function Die({
     [scaledGeom, plan.spec],
   );
 
-  // Material
   const mat = useMemo(
     () =>
       new THREE.MeshStandardMaterial({
         color: tintColor ?? plan.spec.color ?? "#ffffff",
         roughness: 0.45,
         metalness: 0.1,
-        side: THREE.DoubleSide, // avoid culling artifacts on shallow angles
+        side: THREE.DoubleSide,
       }),
     [tintColor, plan.spec.color],
   );
 
-  // Physics body — uses the *scaled* convex hull
   const [ref, api] = useConvexPolyhedron<THREE.Mesh>(() => ({
     mass: 1,
     position: plan.position,
@@ -73,13 +66,11 @@ export function Die({
     linearDamping: 0.015,
   }));
 
-  // Keep still on mount until the first roll
   useEffect(() => {
     api.velocity.set(0, 0, 0);
     api.angularVelocity.set(0, 0, 0);
   }, [api]);
 
-  // Throw when rollToken increments
   useEffect(() => {
     if (!rollToken) return;
     const v = randomThrowVelocity();
@@ -87,7 +78,6 @@ export function Die({
     api.velocity.set(v[0], v[1], v[2]);
     api.angularVelocity.set(w[0], w[1], w[2]);
 
-    // a couple of small upward impulses to mimic a hand toss
     for (let i = 0; i < 3; i++) {
       setTimeout(() => {
         api.applyImpulse(
@@ -98,7 +88,6 @@ export function Die({
     }
   }, [api, rollToken]);
 
-  // ------ Top/bottom-face detection (stabilized) ------
   const velRef = useRef<[number, number, number]>([0, 0, 0]);
   const lastGroup = useRef<number | null>(null);
   const stableCount = useRef(0);
@@ -115,7 +104,6 @@ export function Die({
     const idxArr = getIndexArray(scaledGeom);
     const triCount = Math.floor(idxArr.length / 3);
 
-    // D4 reads the bottom (-Y); others read top (+Y)
     const desired =
       plan.spec.readMode === "bottom"
         ? new THREE.Vector3(0, -1, 0)
@@ -186,7 +174,6 @@ export function Die({
     plan.spec.readMode,
   ]);
 
-  // ----- Render (no mesh scale here — already baked into geometry) -----
   return (
     <mesh
       ref={ref}
