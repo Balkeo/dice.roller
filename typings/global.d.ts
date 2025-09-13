@@ -1,4 +1,4 @@
-/// <reference types="@react-three/fiber" />
+import { ThreeElements } from "@react-three/fiber";
 
 declare global {
   interface Window {

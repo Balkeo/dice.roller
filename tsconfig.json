@@ -39,7 +39,7 @@
     "next-env.d.ts",
     "**/*.ts",
     "**/*.tsx",
-    "global.d.ts"
+    "typings/*.d.ts"
   ],
   "exclude": [
     "node_modules"
