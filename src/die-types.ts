@@ -10,9 +10,10 @@ import {
 export type DieKind = "d4" | "d6" | "d8" | "d10" | "d12" | "d20" | "d100";
 export type InternalKind = DieKind | "d10_tens" | "d10_units";
 
-export type GroupsBuilder = (
-  geom: THREE.BufferGeometry
-) => { groups: FaceGroup[]; triToGroup: Uint16Array };
+export type GroupsBuilder = (geom: THREE.BufferGeometry) => {
+  groups: FaceGroup[];
+  triToGroup: Uint16Array;
+};
 
 export type DieSpec = {
   kind: InternalKind;
@@ -47,7 +48,7 @@ function orientTrianglesOutward(g: THREE.BufferGeometry) {
     g.getIndex() ??
     new THREE.BufferAttribute(
       Uint32Array.from({ length: pos.count }, (_, i) => i),
-      1
+      1,
     );
 
   const A = new THREE.Vector3();
@@ -68,7 +69,11 @@ function orientTrianglesOutward(g: THREE.BufferGeometry) {
     // normal = (B - A) x (C - A)
     n.copy(B).sub(A).cross(C.clone().sub(A));
     // centroid of the triangle
-    centroid.copy(A).add(B).add(C).multiplyScalar(1 / 3);
+    centroid
+      .copy(A)
+      .add(B)
+      .add(C)
+      .multiplyScalar(1 / 3);
 
     // For a convex, origin-centered solid, outward ≈ dot(normal, centroid) > 0
     if (n.dot(centroid) < 0) {
@@ -103,7 +108,7 @@ function geomD10_TealFull(): THREE.BufferGeometry {
   const ring: THREE.Vector3[] = [];
   for (let i = 0; i < 10; i++) {
     const a = (i * Math.PI * 2) / 10;
-    const p = new THREE.Vector3(Math.cos(a), Math.sin(a), (i % 2 ? +h : -h));
+    const p = new THREE.Vector3(Math.cos(a), Math.sin(a), i % 2 ? +h : -h);
     p.normalize(); // normalize to unit radius like the original
     ring.push(p);
   }
@@ -113,16 +118,34 @@ function geomD10_TealFull(): THREE.BufferGeometry {
   // Triangles in the same order as Teal's "faces" (first 10 apex faces -> labels)
   const tris: [number, number, number][] = [
     // apex (numbered) faces
-    [5, 7, 11], [4, 2, 10], [1, 3, 11], [0, 8, 10], [7, 9, 11],
-    [8, 6, 10], [9, 1, 11], [2, 0, 10], [3, 5, 11], [6, 4, 10],
+    [5, 7, 11],
+    [4, 2, 10],
+    [1, 3, 11],
+    [0, 8, 10],
+    [7, 9, 11],
+    [8, 6, 10],
+    [9, 1, 11],
+    [2, 0, 10],
+    [3, 5, 11],
+    [6, 4, 10],
     // belt faces (no labels)
-    [1, 0, 2], [1, 2, 3], [3, 2, 4], [3, 4, 5], [5, 4, 6],
-    [5, 6, 7], [7, 6, 8], [7, 8, 9], [9, 8, 0], [9, 0, 1],
+    [1, 0, 2],
+    [1, 2, 3],
+    [3, 2, 4],
+    [3, 4, 5],
+    [5, 4, 6],
+    [5, 6, 7],
+    [7, 6, 8],
+    [7, 8, 9],
+    [9, 8, 0],
+    [9, 0, 1],
   ];
 
   const pos: number[] = [];
   for (const [i0, i1, i2] of tris) {
-    const A = V[i0], B = V[i1], C = V[i2];
+    const A = V[i0],
+      B = V[i1],
+      C = V[i2];
     pos.push(A.x, A.y, A.z, B.x, B.y, B.z, C.x, C.y, C.z);
   }
 
@@ -205,7 +228,7 @@ const buildD10Groups_Teal: GroupsBuilder = (geom) => {
       [i2, i0],
     ].filter(
       ([a, b]) =>
-        (Math.abs(a - b) % ringN) === 2 || (Math.abs(a - b) % ringN) === 8
+        Math.abs(a - b) % ringN === 2 || Math.abs(a - b) % ringN === 8,
     );
     const [a, b] = pairs[0]; // exactly one such pair
     const key = keyForPair(a, b);

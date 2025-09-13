@@ -22,7 +22,10 @@ export function FaceNumbers({
       {groups.map((g, i) => {
         const normal = g.normal.clone().normalize();
         const pos = g.center.clone().add(normal.clone().multiplyScalar(lift));
-        const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
+        const q = new THREE.Quaternion().setFromUnitVectors(
+          new THREE.Vector3(0, 0, 1),
+          normal,
+        );
         const label = labelForGroup(g, groups);
         return (
           <group key={i} position={pos} quaternion={q}>
@@ -33,8 +36,8 @@ export function FaceNumbers({
               anchorY="middle"
               outlineWidth={0.012}
               outlineColor="black"
-              renderOrder={1000}        // draw late
-              depthTest={false}         // don't let the die hide text
+              renderOrder={1000} // draw late
+              depthTest={false} // don't let the die hide text
               depthWrite={false}
               toneMapped={false}
             >

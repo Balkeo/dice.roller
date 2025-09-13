@@ -49,7 +49,7 @@ export function Die({
       plan.spec.groupsBuilder
         ? plan.spec.groupsBuilder(scaledGeom)
         : buildFaceGroups(scaledGeom),
-    [scaledGeom, plan.spec]
+    [scaledGeom, plan.spec],
   );
 
   // Material
@@ -61,7 +61,7 @@ export function Die({
         metalness: 0.1,
         side: THREE.DoubleSide, // avoid culling artifacts on shallow angles
       }),
-    [tintColor, plan.spec.color]
+    [tintColor, plan.spec.color],
   );
 
   // Physics body — uses the *scaled* convex hull
@@ -92,7 +92,7 @@ export function Die({
       setTimeout(() => {
         api.applyImpulse(
           [0, 1.2 + Math.random() * 0.5, 0],
-          [Math.random() * 0.15, 0, Math.random() * 0.15]
+          [Math.random() * 0.15, 0, Math.random() * 0.15],
         );
       }, 50 + i * 55);
     }
@@ -103,10 +103,15 @@ export function Die({
   const lastGroup = useRef<number | null>(null);
   const stableCount = useRef(0);
 
-  useEffect(() => api.velocity.subscribe((v) => (velRef.current = v)), [api.velocity]);
+  useEffect(
+    () => api.velocity.subscribe((v) => (velRef.current = v)),
+    [api.velocity],
+  );
 
   useEffect(() => {
-    const posAttr = scaledGeom.getAttribute("position") as THREE.BufferAttribute;
+    const posAttr = scaledGeom.getAttribute(
+      "position",
+    ) as THREE.BufferAttribute;
     const idxArr = getIndexArray(scaledGeom);
     const triCount = Math.floor(idxArr.length / 3);
 
@@ -170,11 +175,26 @@ export function Die({
     }, 120);
 
     return () => clearInterval(interval);
-  }, [scaledGeom, onTopValue, plan.id, ref, acceptUpdates, groups, triToGroup, plan.spec.readMode]);
+  }, [
+    scaledGeom,
+    onTopValue,
+    plan.id,
+    ref,
+    acceptUpdates,
+    groups,
+    triToGroup,
+    plan.spec.readMode,
+  ]);
 
   // ----- Render (no mesh scale here — already baked into geometry) -----
   return (
-    <mesh ref={ref} geometry={scaledGeom} material={mat} castShadow receiveShadow>
+    <mesh
+      ref={ref}
+      geometry={scaledGeom}
+      material={mat}
+      castShadow
+      receiveShadow
+    >
       <FaceNumbers
         groups={groups}
         labelForGroup={plan.spec.labelForGroup}

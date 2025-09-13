@@ -7,9 +7,13 @@ export function loadUserConfig(): UserConfig | null {
     const raw = localStorage.getItem(KEY);
     if (!raw) return null;
     return JSON.parse(raw) as UserConfig;
-  } catch { return null; }
+  } catch {
+    return null;
+  }
 }
 
 export function saveUserConfig(cfg: UserConfig) {
-  try { localStorage.setItem(KEY, JSON.stringify(cfg)); } catch {}
+  try {
+    localStorage.setItem(KEY, JSON.stringify(cfg));
+  } catch {}
 }
