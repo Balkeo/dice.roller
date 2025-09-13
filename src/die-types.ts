@@ -194,7 +194,7 @@ const buildD10Groups_Teal: GroupsBuilder = (geom) => {
     ].filter(
       ([a, b]) =>
         Math.abs(a - b) % ringN === 2 || Math.abs(a - b) % ringN === 8,
-    );
+    ) as [number, number][];
     const [a, b] = pairs[0];
     const key = keyForPair(a, b);
     addTriToGroup(t, key);

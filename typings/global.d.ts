@@ -1,3 +1,5 @@
+/// <reference types="@react-three/fiber" />
+
 declare global {
   interface Window {
     teal: any;
