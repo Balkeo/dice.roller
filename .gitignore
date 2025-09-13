@@ -1,0 +1,14 @@
+.vercel
+.terraform
+vendor
+certs
+.idea/*
+!.idea/php-test-framework.xml
+!.idea/php.xml
+!.idea/remote-mappings.xml
+!.idea/modules.xml
+!.idea/phpspec.xml
+*.local
+.DS_Store
+node_modules
+.env.development

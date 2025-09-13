@@ -1,0 +1,18 @@
+/* styles/dice.css */
+#info_div {
+  background-color: transparent;
+}
+.center_field {
+  position: absolute;
+  text-align: center;
+  height: 100%;
+  width: 100%;
+}
+canvas {
+  background-color: #00FF00; /* base page green */
+}
+#label {
+  font-size: 32pt;
+  word-spacing: 0.5em;
+  color: rgba(21, 26, 26, 0.6);
+}
